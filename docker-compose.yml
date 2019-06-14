@@ -1,0 +1,25 @@
+---
+version: '3.6'
+services:
+  quadbot: 
+    container_name: quadbot
+    build: ./ 
+    environment:
+       - PLATFORM=pokemon-showdown
+    networks: ['stack']
+
+
+  searx:
+    container_name: searx 
+    ports: ['8888:8888']
+    build: searx/
+    networks: ['stack']
+
+
+networks: 
+  {stack: {}}
+
+secrets:
+  details.yml:
+    file: 
+      ./config//elasticsearch.yml
