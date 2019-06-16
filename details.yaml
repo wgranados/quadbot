@@ -14,7 +14,20 @@ pokemon-showdown:
   # enforce punishments. allow games: Specify if chatgames like hangman should 
   # be allowed in the room. tourwhitelist: If you want to make specific people
   # able to start tournaments without being @, add them to this list
-  rooms: []
+  rooms: 
+      botdev:
+        moderate:
+          anything: false
+          banword: false
+          caps: false
+          groupchats: false
+          room: math # This should be the same name as the room name above
+          spam: false
+          stretching: false
+          urls: false
+        broadcastrank: '+'
+        allowgames: False
+
 
 discord:
   command_prefix: '.'

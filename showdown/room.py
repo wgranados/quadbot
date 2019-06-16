@@ -1,4 +1,3 @@
-
 from showdown.user import User
 
 

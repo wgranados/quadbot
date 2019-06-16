@@ -13,6 +13,8 @@ async def chat_handler(message):
     # handle the command logic elsewhere elsewhere
     if message.requests_command():
         reply = await invoker.invoke_command(message)
+        print(message.room.name)
+        print(reply.text)
         if not message.is_pm:
             await psclient.send_room(message.room.name, reply.text)
         else:

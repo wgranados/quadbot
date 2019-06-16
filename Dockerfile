@@ -18,7 +18,7 @@ COPY showdown/* /usr/src/app/showdown/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN echo "#!/bin/sh" >> run.sh \
   # && echo "while true; do echo \"test\"; sleep 2; done " >> run.sh\
-  && echo "python3 serve.py pokemon-showdown" >> run.sh \
+  && echo "python3 -u serve.py pokemon-showdown" >> run.sh \
   && chmod +x run.sh
 
 ENTRYPOINT [ "/usr/src/app/run.sh" ]

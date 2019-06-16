@@ -1,11 +1,49 @@
 # curl localhost:8888 --data 'q=yeet&format=json' 
 import asyncio
+import aiohttp
+import json
 from plugins.CommandBase import CommandBase
 from showdown.showdown import ReplyObject
 
 class Search(CommandBase):
   def __init__(self):
-    pass
+    super().__init__(aliases=['search'], can_learn=False)
+
+  def learn(self, room, user, data):
+        pass
+
+  async def query(self, search_term):
+    session = aiohttp.ClientSession()
+    url = 'http://searx:8888'
+    payload = {'q': search_term , 'format':'json'}
+    resp = await session.get(url, data=payload)
+    text = await resp.text()
+    val = json.loads(text)
+    await session.close()
+    return val 
 
   async def response(self, room, user, args):
-    return await asyncio.sleep(0)
+    q = await self.query('pokemon')
+    return ReplyObject(q['results'][1]['content'])
+      # can't directly convert to json since PS returns a weird format like
+      # ']{json content}', so have to offset it by 1
+
+  def _help(self, room, user, args):
+    pass
+
+  def _error(self, room, user, reason):
+    pass
+
+  def _success(self, room, user, args):
+      """ Returns a success response to the user.
+
+      Successfully returns the expected response from the user based on the args.
+
+      Args:
+          room: Room, room this command was evoked from.
+          user: User, user who evoked this command.
+          args: list of str, any sequence of parameters which are supplied to this command
+      Returns:
+          ReplyObject
+      """
+      pass

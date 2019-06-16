@@ -187,7 +187,7 @@ class Client:
         parsed_messages = message.split('\n') if '\n' in message else [message]
         for msg in parsed_messages:
             content = '|/pm {user}, {msg}'.format(user=user, msg=msg)
-            await elf.ws.send(content)
+            await self.ws.send(content)
 
     async def send_room(self, room_name, message):
         """Replies in specified chat room with message; message can be delimited with newlines.
@@ -197,7 +197,7 @@ class Client:
         """
         parsed_messages = message.split('\n') if '\n' in message else [message]
         for msg in parsed_messages:
-            await self.send('{room}|{msg}'.format(room_name=room_name, msg=msg))
+            await self.send('{room_name}|{msg}'.format(room_name=room_name, msg=msg))
 
     def event(self, coro):
         """ Decorator for the main functions required by the API.
@@ -268,11 +268,11 @@ class MessageWrapper:
 
     def from_self(self):
         """Determines if this message was from the bot instance itself."""
-        return self.user.name == self._config['bot_username']
+        return self.user.name == self._config['username']
 
     def requests_command(self):
         """Determines if the message sent by the user starts with a command character."""
-        return self.content.startswith(self._config['command_char'])
+        return self.content.startswith(self._config['command_prefix'])
 
     def __str__(self):
         # |c:|unix_time|user| message => ['c:', 'unix_time', 'user', 'message']
