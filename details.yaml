@@ -1,23 +1,23 @@
 pokemon-showdown:
-    # This is the username you want the bot to have, MUST BE REGISTRED
-    username: 'octbot'
-    # The password for the bot
-    password: 'alpacino'
-    # MASTER bypass every allowance check and can do everything
-    owner: 'wgma'
-    # command character, preferably something people don't start sentences with
-    command_prefix: '.'
-    # OPTIONAL: The specific avatar the bot should use. Leave as 0 to pick the 
-    # default one.
-    avatar: 0
-    # The rooms that should be joined on login. Leave moderate as fale to not 
-    # enforce punishments. allow games: Specify if chatgames like hangman should 
-    # be allowed in the room. tourwhitelist: If you want to make specific people
-    # able to start tournaments without being @, add them to this list
-    rooms:
+  # This is the username you want the bot to have, MUST BE REGISTRED
+  username: 'octbot'
+  # The password for the bot
+  password: 'alpacino'
+  # MASTER bypass every allowance check and can do everything
+  owner: 'wgma'
+  # command character, preferably something people don't start sentences with
+  command_prefix: '.'
+  # OPTIONAL: The specific avatar the bot should use. Leave as 0 to pick the 
+  # default one.
+  avatar: 0
+  # The rooms that should be joined on login. Leave moderate as fale to not 
+  # enforce punishments. allow games: Specify if chatgames like hangman should 
+  # be allowed in the room. tourwhitelist: If you want to make specific people
+  # able to start tournaments without being @, add them to this list
+  rooms: []
 
 discord:
-    command_prefix: '.'
+  command_prefix: '.'
   apikey: ''
 
 slack:

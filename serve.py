@@ -1,12 +1,12 @@
 import sys
-import showdown
-import discord
-from discord.ext import commands
+from showdown.showdown import Client
 import asyncio
 from plugins.invoker import Invoker
 from showdown.showdown import ReplyObject
+from utils.details import config
 
 invoker = Invoker()
+psclient = Client(config['pokemon-showdown'])
 
 @psclient.event
 async def chat_handler(message):
@@ -25,14 +25,14 @@ async def battle_handler(message):
 
 if __name__ == "__main__":
     supported_platforms = ['discord', 'pokemon-showdown', 'slack']
-    if(sys.argc < 2 or sys.argv[0] not in supported_platforms):
+    platform = sys.argv[1]
+    if(len(sys.argv) < 2 or platform not in supported_platforms):
         print('serve [platform]\n \t platform: string, one of {}'.format(','.join(supported_platforms)))
-    platform = sys.argv[0] 
+        exit(0)
     if platform == 'pokemon-showdown':
-        psclient = showdown.Client()
         event_loop = asyncio.get_event_loop()
         event_loop.run_until_complete(psclient.make_connection())
     elif platform == 'discord':
-        bot.run('token')
+        pass
     elif platform == 'slack':
         pass

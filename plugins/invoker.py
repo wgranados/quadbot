@@ -18,7 +18,7 @@
 import asyncio
 import importlib
 import glob
-from showdown import ReplyObject
+from showdown.showdown import ReplyObject
 
 class Invoker:
     """Invoker class for handling dynamic loading of command classes.
@@ -102,8 +102,7 @@ class Invoker:
         alias = raw_message[1:] if first_white_space_index < 0 else raw_message[1:first_white_space_index]
         return alias
 
-    @asyncio.coroutine
-    def invoke_command(self, message):
+    async def invoke_command(self, message):
         """Attempt to invoke invoke the specific command with provided arguments.
         Args:
             message: MessageWrapper, message wrapper containing content.
@@ -114,8 +113,8 @@ class Invoker:
         command_msg = message.content[len(command_alias)+1:].lstrip()
         for cmd in self.modules:
             if command_alias in cmd.aliases:
-                response = yield from cmd.response(message.room, message.user, cmd.parse_args(command_msg))
+                response = await cmd.response(message.room, message.user, cmd.parse_args(command_msg))
                 return response
-        return (yield from ReplyObject())
+        return await ReplyObject()
 
         

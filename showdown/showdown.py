@@ -3,9 +3,8 @@ import aiohttp
 import time
 import websockets
 import json
-from details import ps_config as default_config
-from room import Room
-from user import User
+from showdown.room import Room
+from showdown.user import User
 
 
 class ClientException(Exception):
@@ -43,7 +42,7 @@ class Client:
         self.rooms = {}
         # attempt connectiong to the main PS server, unless otherwise specified
         self.log_errors = log_errors
-        self.config = default_config if not config else config 
+        self.config = config 
         self.url = 'ws://sim.psim.us:8000/showdown/websocket' if not url else url
         self.session = aiohttp.ClientSession()
 
@@ -126,8 +125,8 @@ class Client:
         """
         url = 'http://play.pokemonshowdown.com/action.php'
         payload = {'act': 'login',
-                   'name': self.config['bot_username'],
-                   'pass': self.config['bot_password'],
+                   'name': self.config['username'],
+                   'pass': self.config['password'],
                    'challengekeyid': challengekeyid,
                    'challenge': challenge}
         # first generate the post request content, then retrieve the relevant
@@ -139,7 +138,7 @@ class Client:
         offset = 1
         assertion = json.loads(resp[offset:])['assertion']
         if assertion:
-            await self.ws.send('|/trn {},0,{}'.format(self.config['bot_username'], assertion))
+            await self.ws.send('|/trn {},0,{}'.format(self.config['username'], assertion))
         else:
             raise ClientException('bot credentials are incorrect')
 
@@ -157,8 +156,8 @@ class Client:
         if self.config['avatar'] >= 0:
             await self.ws.send('|/avatar {num}'.format(num=self.config['avatar']))
         # add rooms that were prefined in our cofiguration file
-        for room in self.config['join-rooms']:
-            await self.join_room(room, self.config['join-rooms'][room])
+        for room in self.config['rooms']:
+            await self.join_room(room, self.config['rooms'][room])
 
     async def join_room(self, room, room_setting):
         """ Joins a room on pokemon showdown.
