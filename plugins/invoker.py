@@ -115,6 +115,6 @@ class Invoker:
             if command_alias in cmd.aliases:
                 response = await cmd.response(message.room, message.user, cmd.parse_args(command_msg))
                 return response
-        return await ReplyObject()
+        return ReplyObject()
 
         
