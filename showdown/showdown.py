@@ -87,14 +87,21 @@ class Client:
                             unix_time, user_name, user_msg = str(int(time.time())), content[3], content[4]
                             user = User(user_name)
                             message = MessageWrapper(unix_time, user, user_msg, room, self.config)
-                            await self.chat_handler(message)
+                            try: 
+                                await self.chat_handler(message)
+                            except Exception: 
+                                pass
+
                         elif event == 'pm':
                             # |pm|user|recepient| message => ['', 'pm', 'user', 'recepient', 'message']
                             unix_time, user_name, other_name, user_msg = str(int(time.time())), content[2], content[3], content[4]
                             room.name = 'pm'  # change the room to a private message for better logging
                             user = User(user_name)
                             message = MessageWrapper(unix_time, user, user_msg, room, self.config)
-                            await self.chat_handler(message)
+                            try:
+                                await self.chat_handler(message)
+                            except Exception:
+                                pass
                         else:
                             print(event, 'is not implemented at the moment')
 

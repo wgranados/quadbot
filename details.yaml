@@ -1,3 +1,4 @@
+base-url: 'https://wgma.ca'
 pokemon-showdown:
   # This is the username you want the bot to have, MUST BE REGISTRED
   username: 'octbot'
