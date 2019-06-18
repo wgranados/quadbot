@@ -7,14 +7,9 @@ repo_url: https://github.com/wlgranados/quadbot
 # documented. Higher indentation leads to smaller header size.
 generate:
   - showdown.md:
-    - showdown.Client
+    - showdown.showdown.Client
   - plugins/CommandBase.md:
       - plugins.CommandBase.CommandBase
-  - plugins/LatexCommand.md:
-      - plugins.Latex.LatexCommand.Latex
-  - plugins/CreditsCommand.md:
-      - plugins.CreditsCommand.Credits
-
 
 # MkDocs pages configuration. The `<<` operator is sugar added by pydocmd
 # that allows you to use an external Markdown file (eg. your project's README)
@@ -22,15 +17,15 @@ generate:
 # This configuration is not mandatory if you have your own mkdocs.yml config file.
 pages:
 - Home: index.md << ../README.md
-- Setup: setup.md << ../SETUP.md
-- Development: 
-  - showdown: showdown.md
-  - commands: plugins/CommandBase.md
-  - testing: testing.md << ../TESTING.md
+# - Setup: setup.md << ../SETUP.md
+# - Development: 
+#   - showdown: showdown.md
+#   - commands: plugins/CommandBase.md
+#   - testing: testing.md << ../TESTING.md
 - Contributing: contributing.md << ../CONTRIBUTING.md
 - Commands:
-  - Credits: plugins/CreditsCommand.md
-  - Latex: plugins/LatexCommand.md
+  - Search: search.md << ../plugins/search/SearchCommand.md
+  - Steam: steam.md << ../plugins/steam/SteamCommand.md
 
 # These options all show off their default values. You don't have to add
 # them to your configuration if you're fine with the default.
