@@ -3,6 +3,7 @@ import aiohttp
 import time
 import websockets
 import json
+import traceback
 from showdown.room import Room
 from showdown.user import User
 
@@ -90,7 +91,7 @@ class Client:
                             try: 
                                 await self.chat_handler(message)
                             except Exception: 
-                                pass
+                                traceback.print_exc()
 
                         elif event == 'pm':
                             # |pm|user|recepient| message => ['', 'pm', 'user', 'recepient', 'message']
@@ -100,8 +101,8 @@ class Client:
                             message = MessageWrapper(unix_time, user, user_msg, room, self.config)
                             try:
                                 await self.chat_handler(message)
-                            except Exception:
-                                pass
+                            except Exception as e:
+                                traceback.print_exc()
                         else:
                             print(event, 'is not implemented at the moment')
 

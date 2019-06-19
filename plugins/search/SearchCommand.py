@@ -27,20 +27,21 @@ class Search(CommandBase):
     resp = await session.get(url, data=payload)
     text = await resp.text()
     val = json.loads(text)
+    print(val)
     await session.close()
     return val 
 
   async def response(self, room, user, args):
         if len(args) == 1 and args[0] == 'help':
             return ReplyObject('{}/{}'.format(config['base-url'], self.aliases[0])) 
-        elif len(args) > 2:
+        elif len(args) > 3:
             return ReplyObject('Too many arguments provided.')
         elif len(args) == 0:
             return ReplyObject('Not enough arguments provided.')
-        elif len(args) == 2 and args[1] not in self.supported_engines:
+        elif len(args) >= 2 and args[1] not in self.supported_engines:
             return ReplyObject('engine provided not supported')
         else:
-            return self._success(room, user, args)
+            return await self._success(room, user, args)
 
 
   def _help(self, room, user, args):
@@ -58,13 +59,32 @@ class Search(CommandBase):
       Returns:
           ReplyObject
       """
-      if len(args) == 2: 
+      if len(args) == 1:
         search = args[0]
-        engine = args[1]
+        q = await self.query(search)
+        if q['results']:
+          url = q['results'][0]['pretty_url']
+          content = q['results'][0]['content']
+          return ReplyObject('{} - retrieved from {}'.format(content, url))
+        else:
+          return ReplyObject('Your query didn\'t come up with results')
+      elif len(args) == 2:
+        search, engine = args[0], args[1]
         q = await self.query(search, engine)
         if q['results']:
           url = q['results'][0]['pretty_url']
           content = q['results'][0]['content']
-          return ReplyObject('{} - retrieved from <a href="{}">source</a>'.format(content, url))
+          return ReplyObject('{} - retrieved from {}'.format(content, url))
+        else:
+          return ReplyObject('Your query didn\'t come up with results')
+      elif len(args) == 3: 
+        search, engine, limit = args[0], args[1], int(args[2])
+        q = await self.query(search, engine)
+        if q['results']:
+          reply = []
+          for i in range(min(len(q['results']), limit)):
+            url, content = q['results'][i]['pretty_url'], q['results'][i]['content']
+            reply.append('{} - retrieved from {}'.format(content, url))
+          return ReplyObject('\n'.join(reply))
         else:
           return ReplyObject('Your query didn\'t come up with results')
