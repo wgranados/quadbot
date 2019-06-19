@@ -15,9 +15,9 @@ class Search(CommandBase):
         pass
 
   async def query(self, search_term, engines):
-    """Queries searx for info.
+    """queries searx for info.
     
-    Args:
+    args:
       search_term: string, something being searched for.
       engines: string, specific engines supported.
     """
@@ -27,7 +27,20 @@ class Search(CommandBase):
     resp = await session.get(url, data=payload)
     text = await resp.text()
     val = json.loads(text)
-    print(val)
+    await session.close()
+    return val 
+    """queries searx for info.
+    
+    args:
+      search_term: string, something being searched for.
+      engines: string, specific engines supported.
+    """
+    session = aiohttp.clientsession()
+    url = 'http://searx:8888'
+    payload = {'q': search_term , 'format':'json', 'engines': engines}
+    resp = await session.get(url, data=payload)
+    text = await resp.text()
+    val = json.loads(text)
     await session.close()
     return val 
 

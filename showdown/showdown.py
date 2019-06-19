@@ -65,6 +65,7 @@ class Client:
                     parsed_messages= lines[1:]
                 parsed_messages = list(filter(lambda x: x != '', parsed_messages))  # remove empty lines
                 for msg in parsed_messages:
+                    print(msg)
                     # random prompt from PS which we don't need to interpret
                     if not msg.startswith('|'): continue
                     content = msg.split('|')
@@ -103,8 +104,11 @@ class Client:
                                 await self.chat_handler(message)
                             except Exception as e:
                                 traceback.print_exc()
+                        elif event == 'J':
+                            print('J not implemented')
                         else:
-                            print(event, 'is not implemented at the moment')
+                            pass
+                            # print(event, 'is not implemented at the moment')
 
         except KeyboardInterrupt:
             print('program has been terminated by program interrupt')
