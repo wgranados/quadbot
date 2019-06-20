@@ -4,7 +4,7 @@ import json
 from plugins.CommandBase import CommandBase
 from utils.images import OnlineImage
 from showdown.showdown import ReplyObject
-from showdown.Users import User 
+from showdown.user import User 
 
 class Steam(CommandBase):
   def __init__(self):
@@ -79,11 +79,12 @@ class Steam(CommandBase):
         url = q['results'][0]['url']
         content = q['results'][0]['content']
         gameid = self.parse_gameid(url) 
-        header_image, name, description = await self.get_game_data(gameid)
+        game_url, header_image, name, description = await self.get_game_data(gameid)
         width, height = OnlineImage.get_image_info(header_image)
-        if User.compareRanks(room.rank, '*') and show_image:
+        if User.compare_ranks(room.rank, '*') and show_image:
             return ReplyObject(('/addhtmlbox <div id="gameinfo"> <img src="{}" height="{}" width="{}"></img> <p>Name: <a href="{}"> {}</a></p> <p>Description: {} </p> </div>').format(header_image, height, width, game_url, name, description), True, True)
         else:
-            return ReplyObject('Name: {} Link: Description: {}'.format(name, game_url, description), True)
+            rep = 'Name: {} Link: {} Description: {}'.format(name, game_url, description)
+            return Reply(rep, True) if len(rep) <= 300 else ReplyObject(rep[:300], True)
       else:
         return ReplyObject('Your query didn\'t come up with results')
