@@ -62,7 +62,7 @@ class Client:
                     lines = message_stream.split('\n')
                     # room names are always on the first line and are formatted like'>room_name'
                     room_name = lines[0][1:]
-                    parsed_messages= lines[1:]
+                    parsed_messages = lines[1:]
                 parsed_messages = list(filter(lambda x: x != '', parsed_messages))  # remove empty lines
                 for msg in parsed_messages:
                     print(msg)
@@ -86,13 +86,14 @@ class Client:
                             # |c:|unix_time|user| message => ['', 'c:', 'unix_time', 'user', 'message']
                             # we'll use our own unix time for now, since it's not standarized across pm's and
                             # chat messages
-                            unix_time, user_name, user_msg = str(int(time.time())), content[3], content[4]
-                            user = User(user_name)
-                            message = MessageWrapper(unix_time, user, user_msg, room, self.config)
-                            try: 
-                                await self.chat_handler(message)
-                            except Exception: 
-                                traceback.print_exc()
+                            if room.loaded:
+                                unix_time, user_name, user_msg = str(int(time.time())), content[3], content[4]
+                                user = User(user_name)
+                                message = MessageWrapper(unix_time, user, user_msg, room, self.config)
+                                try: 
+                                    await self.chat_handler(message)
+                                except Exception: 
+                                    traceback.print_exc()
 
                         elif event == 'pm':
                             # |pm|user|recepient| message => ['', 'pm', 'user', 'recepient', 'message']
@@ -104,8 +105,19 @@ class Client:
                                 await self.chat_handler(message)
                             except Exception as e:
                                 traceback.print_exc()
+                        elif event == "raw": 
+                            if content[2].startswith(('<div class="infobox infobox-roomintro">'
+                                                    '<div class="infobox-limited">')):
+                                room.loaded = True
                         elif event == 'J':
-                            print('J not implemented')
+                            if content[2][1:] == self.config['username']:
+                                room.rank = content[2][0]
+                                room.loaded = True 
+                        elif event == 'users':
+                            for user in content[2].split(',')[1:]:
+                                room.add_user(User(user[1:], user[0], False))
+                            # If PS doesn't tell us we joined, this still give us our room rank
+                            room.rank = content[2][content[2].index(self.config['username']) - 1]
                         else:
                             pass
                             # print(event, 'is not implemented at the moment')
@@ -249,8 +261,6 @@ class Client:
             Room object. If the Room is a room we are not already in then a
                          an empty room object room object is returned.
         """
-        if room_name not in self.rooms:
-            return Room('Empty')
         alias = {'nu': 'neverused', 'tc' : 'techcode'}
         if room_name in alias:
             room_name = alias[room_name]

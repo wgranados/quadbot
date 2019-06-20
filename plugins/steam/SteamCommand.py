@@ -35,6 +35,7 @@ class Steam(CommandBase):
     payload= {'appids': gameid}
     resp = await session.get('http://store.steampowered.com/api/appdetails', params=payload)
     text = await resp.text()
+    await session.close()
     game_data = json.loads(text)[gameid]['data']
     header_image, name, desc = game_data['header_image'], game_data['name'], game_data['short_description']
     return game_url, header_image, name, desc
@@ -84,7 +85,7 @@ class Steam(CommandBase):
         if User.compare_ranks(room.rank, '*') and show_image:
             return ReplyObject(('/addhtmlbox <div id="gameinfo"> <img src="{}" height="{}" width="{}"></img> <p>Name: <a href="{}"> {}</a></p> <p>Description: {} </p> </div>').format(header_image, height, width, game_url, name, description), True, True)
         else:
-            rep = 'Name: {} Link: {} Description: {}'.format(name, game_url, description)
-            return Reply(rep, True) if len(rep) <= 300 else ReplyObject(rep[:300], True)
+            rep = '**Name:** {} **Link:** {} **Description:** {}'.format(name, game_url, description)
+            return ReplyObject(rep, True) if len(rep) <= 300 else ReplyObject(rep[:300], True)
       else:
         return ReplyObject('Your query didn\'t come up with results')
