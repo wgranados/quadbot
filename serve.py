@@ -1,5 +1,6 @@
 import sys
 from showdown.showdown import Client
+from showdown.user import User
 import asyncio
 from plugins.invoker import Invoker
 from showdown.showdown import ReplyObject
@@ -12,13 +13,15 @@ psclient = Client(config['pokemon-showdown'])
 async def chat_handler(message):
     # handle the command logic elsewhere elsewhere
     if message.requests_command():
-        reply = await invoker.invoke_command(message)
-        print(message.room.name)
-        print(reply.text)
-        if not message.is_pm:
+        if message.is_pm:
+            reply = await invoker.invoke_command(message)
+            await psclient.send_pm(message.user.name, reply.text)
+        # handle public room messages to avoid spam
+        if not message.is_pm and User.compare_ranks(message.user.rank, message.room.broadcastrank):
+            reply = await invoker.invoke_command(message)
             await psclient.send_room(message.room.name, reply.text)
         else:
-            await psclient.send_pm(message.user.name, reply.text)
+            await psclient.send_pm(message.user.name, 'insufficient rank')
 
 @psclient.event
 async def battle_handler(message):

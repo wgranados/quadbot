@@ -4,6 +4,7 @@ import time
 import websockets
 import json
 import traceback
+import re
 from showdown.room import Room
 from showdown.user import User
 
@@ -47,6 +48,11 @@ class Client:
         self.url = 'ws://sim.psim.us:8000/showdown/websocket' if not url else url
         self.session = aiohttp.ClientSession()
 
+    # Helpful functions
+    def to_id(self, name):
+        """Assigns a unique ID to everyone"""
+        return re.sub(r'[^a-zA-z0-9,]', '', name).lower()
+
     async def make_connection(self):
         """Initiates a connection to the specified showdown server."""
         try:
@@ -87,8 +93,8 @@ class Client:
                             # we'll use our own unix time for now, since it's not standarized across pm's and
                             # chat messages
                             if room.loaded:
-                                unix_time, user_name, user_msg = str(int(time.time())), content[3], content[4]
-                                user = User(user_name)
+                                unix_time, user_name, user_msg = str(int(time.time())), content[3][1:], content[4]
+                                user = room.users[self.to_id(user_name)]
                                 message = MessageWrapper(unix_time, user, user_msg, room, self.config)
                                 try: 
                                     await self.chat_handler(message)
@@ -99,7 +105,7 @@ class Client:
                             # |pm|user|recepient| message => ['', 'pm', 'user', 'recepient', 'message']
                             unix_time, user_name, other_name, user_msg = str(int(time.time())), content[2], content[3], content[4]
                             room.name = 'pm'  # change the room to a private message for better logging
-                            user = User(user_name)
+                            user = User(self.to_id(user_name))
                             message = MessageWrapper(unix_time, user, user_msg, room, self.config)
                             try:
                                 await self.chat_handler(message)
@@ -109,26 +115,49 @@ class Client:
                             if content[2].startswith(('<div class="infobox infobox-roomintro">'
                                                     '<div class="infobox-limited">')):
                                 room.loaded = True
-                        elif event == 'J':
-                            if content[2][1:] == self.config['username']:
-                                room.rank = content[2][0]
+                        elif event == 'j':
+                            name, rank = self.to_id(content[2][1:]), content[2][0]
+                            if name == self.config['username']:
+                                room.rank = rank 
                                 room.loaded = True 
+                            room.add_user(User(name, rank, name == self.config['owner']))
                         elif event == 'users':
                             for user in content[2].split(',')[1:]:
-                                room.add_user(User(user[1:], user[0], False))
+                                name, rank = self.to_id(user[1:]),  user[0]
+                                room.add_user(User(name, rank, name == self.config['owner']))
                             # If PS doesn't tell us we joined, this still give us our room rank
                             room.rank = content[2][content[2].index(self.config['username']) - 1]
+                        elif event == "l": 
+                            name = self.to_id(content[2][1:])
+                            if name == self.config['username']: 
+                                # this is just a failsafe in case the bot is forcibly removed
+                                # from a room. any other memory release required is handeled by
+                                # the room destruction
+                                if room.name in self.rooms:
+                                    del self.rooms[room.name]
+                            room.remove_user(name)
+                        elif event == "n" and len(content[1]) < 3:
+                            # keep track of your own rank
+                            # when demoting / promoting a user the server sends a |n| message
+                            # to update the userlist
+                            new_name, rank, name  = self.to_id(content[2][1:]), content[2][0], self.to_id(content[3])
+                            if name == self.config['username']:
+                                room.rank = rank 
+                            new_user = User(new_name, rank, new_name == self.config['owner'])
+                            room.renamed_user(name, new_user)
+                        elif event == 'deinit': 
+                            del self.rooms[room.name]
                         else:
+                            print(event, 'is not implemented at the moment')
                             pass
-                            # print(event, 'is not implemented at the moment')
 
         except KeyboardInterrupt:
-            print('program has been terminated by program interrupt')
+            print('This program has been terminated by program interrupt')
             await self.ws.close()
             self.session.close()
             exit()
         except ClientException as e:
-            print(e)
+            print('ClientException:', e)
         finally:
             await self.ws.close()
             self.session.close()

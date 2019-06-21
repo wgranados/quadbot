@@ -74,3 +74,5 @@ class User:
     def has_rank(self, rank):
         """Determines if a user has sufficient staff rights"""
         return self.owner or User.compareRanks(self.rank, rank)
+    def __str__(self):
+        return 'name: {}, userid: {}, rank: {}'.format(self.name, self.id, self.rank)

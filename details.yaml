@@ -16,7 +16,7 @@ pokemon-showdown:
   # be allowed in the room. tourwhitelist: If you want to make specific people
   # able to start tournaments without being @, add them to this list
   rooms: 
-      botdev:
+      botdevelopment:
         moderate:
           anything: false
           banword: false

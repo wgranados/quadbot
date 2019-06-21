@@ -61,4 +61,19 @@ class Room:
         if user.id not in self.users:
             self.users[user.id] = user
 
+    def remove_user(self, user):
+        """Removes a user from the current rooms list of users.
+        Args:
+            user: string, userid for this user. 
+        """
+        if user in self.users:
+            del self.users[user]
 
+    def renamed_user(self, userid, user):
+        """Renames a user from the current rooms list of users.
+        Args:
+            userid: string, userid for this user. 
+            user: User object, user object containing rank, userid, name, etc.
+        """
+        self.remove_user(userid)
+        self.add_user(user)

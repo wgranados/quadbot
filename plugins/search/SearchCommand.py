@@ -9,7 +9,11 @@ from showdown.showdown import ReplyObject
 class Search(CommandBase):
   def __init__(self):
     super().__init__(aliases=['search'], can_learn=False)
-    self.supported_engines = ['google', 'steam']
+    self.supported_engines = [
+      'google',
+      'steam',
+      'github'
+      ]
 
   def learn(self, room, user, data):
         pass
@@ -78,7 +82,8 @@ class Search(CommandBase):
         if q['results']:
           url = q['results'][0]['pretty_url']
           content = q['results'][0]['content']
-          return ReplyObject('{} - retrieved from {}'.format(content, url))
+          rep = '{} - retrieved from {}'.format(content, url)
+          return ReplyObject(rep, True) if len(rep) <= 300 else ReplyObject(rep[:300], True)
         else:
           return ReplyObject('Your query didn\'t come up with results')
       elif len(args) == 2:
@@ -87,7 +92,8 @@ class Search(CommandBase):
         if q['results']:
           url = q['results'][0]['pretty_url']
           content = q['results'][0]['content']
-          return ReplyObject('{} - retrieved from {}'.format(content, url))
+          rep = '{} - retrieved from {}'.format(content, url)
+          return ReplyObject(rep, True) if len(rep) <= 300 else ReplyObject(rep[:300], True)
         else:
           return ReplyObject('Your query didn\'t come up with results')
       elif len(args) == 3: 
@@ -97,7 +103,8 @@ class Search(CommandBase):
           reply = []
           for i in range(min(len(q['results']), limit)):
             url, content = q['results'][i]['pretty_url'], q['results'][i]['content']
-            reply.append('{} - retrieved from {}'.format(content, url))
+            rep = '{} - retrieved from {}'.format(content, url)
+            reply.append(rep if len(rep) <= 300 else rep[:300])
           return ReplyObject('\n'.join(reply))
         else:
           return ReplyObject('Your query didn\'t come up with results')
