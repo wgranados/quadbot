@@ -34,14 +34,22 @@ def response(resp):
     results = []
 
     dom = html.fromstring(resp.text)
+    # only one element is given
+    if(dom.tag == 'a'):
+        href = dom.attrib.get('href')
+        title = dom.xpath("./div[1]")[0].text
+        content = dom.xpath("./div[2]/img")[0].attrib.get('src')
+        results.append({'url': href, 'title': title, 'content': content})
+        return results
+
     for result in dom:
       try:
         href = result.attrib.get('href')
         title = result.xpath("./div[1]")[0].text
         content = result.xpath("./div[2]/img")[0].attrib.get('src')
+        results.append({'url': href, 'title': title, 'content': content})
       except:
         pass
 
-      results.append({'url': href, 'title': title, 'content': content})
 
     return results
