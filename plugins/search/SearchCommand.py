@@ -4,7 +4,7 @@ import aiohttp
 import json
 from plugins.CommandBase import CommandBase
 from utils.details import config
-from showdown.showdown import ReplyObject
+from clients.pokemon.showdown import ReplyObject
 
 class Search(CommandBase):
   def __init__(self):

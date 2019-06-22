@@ -1,19 +1,26 @@
 ---
 version: '3.6'
 services:
-  quadbot: 
-    container_name: quadbot
-    build: ./ 
-    environment:
-       - PLATFORM=pokemon-showdown
+  quadbot_ps: 
+    container_name: quadbot_ps
+    build: 
+      context: ./ 
+      args:
+        PLATFORM: pokemon-showdown 
+  quadbot_ds: 
+    container_name: quadbot_ds
+    build: 
+      context: ./ 
+      args:
+        PLATFORM: discord 
 
   searx:
     container_name: searx 
     ports: ['8888:8888']
     build: searx/
-
-
-secrets:
-  details.yml:
-    file: 
-      ./config//elasticsearch.yml
+  db:
+    image: postgres 
+    ports: ['5432:54232']
+    
+    volumes:
+      - ./db/:/root/db/

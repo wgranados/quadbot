@@ -1,10 +1,11 @@
+# curl localhost:8888 --data 'q=bayonetta&engines=steam&format=json' 
 import asyncio
 import aiohttp
 import json
 from plugins.CommandBase import CommandBase
 from utils.images import OnlineImage
-from showdown.showdown import ReplyObject
-from showdown.user import User 
+from clients.pokemon.showdown import ReplyObject
+from clients.pokemon.user import User 
 
 class Steam(CommandBase):
   def __init__(self):

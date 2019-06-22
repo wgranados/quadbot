@@ -18,7 +18,7 @@
 import asyncio
 import importlib
 import glob
-from showdown.showdown import ReplyObject
+from clients.pokemon.showdown import ReplyObject
 
 class Invoker:
     """Invoker class for handling dynamic loading of command classes.

@@ -1,32 +1,12 @@
 import sys
-from showdown.showdown import Client
-from showdown.user import User
+import time
 import asyncio
-from plugins.invoker import Invoker
-from showdown.showdown import ReplyObject
 from utils.details import config
 
-invoker = Invoker()
-psclient = Client(config['pokemon-showdown'])
-
-@psclient.event
-async def chat_handler(message):
-    # handle the command logic elsewhere elsewhere
-    if message.requests_command():
-        if message.is_pm:
-            reply = await invoker.invoke_command(message)
-            await psclient.send_pm(message.user.name, reply.text)
-        # handle public room messages to avoid spam
-        if not message.is_pm and User.compare_ranks(message.user.rank, message.room.broadcastrank):
-            reply = await invoker.invoke_command(message)
-            await psclient.send_room(message.room.name, reply.text)
-        else:
-            await psclient.send_pm(message.user.name, 'insufficient rank')
-
-@psclient.event
-async def battle_handler(message):
-    pass
-
+from clients.pokemon.handler import psclient
+from clients.discord.handler import dsclient
+#from showdown.event_handler import psclient
+# from discord.event_handler import dsclient
 
 if __name__ == "__main__":
     supported_platforms = ['discord', 'pokemon-showdown', 'slack']
@@ -38,6 +18,6 @@ if __name__ == "__main__":
         event_loop = asyncio.get_event_loop()
         event_loop.run_until_complete(psclient.make_connection())
     elif platform == 'discord':
-        pass
+        dsclient.run(config['discord']['token'])
     elif platform == 'slack':
         pass

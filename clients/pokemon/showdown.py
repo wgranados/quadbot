@@ -5,8 +5,8 @@ import websockets
 import json
 import traceback
 import re
-from showdown.room import Room
-from showdown.user import User
+from clients.pokemon.room import Room
+from clients.pokemon.user import User
 
 
 class ClientException(Exception):

@@ -1,4 +1,4 @@
-from showdown.user import User
+from clients.pokemon.user import User
 
 
 class Room:
