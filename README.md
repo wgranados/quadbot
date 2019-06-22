@@ -8,6 +8,7 @@ This is an modular multiplatform chat bot written in Python 3, supporting hot re
 ### Platforms
 
 - [x] PokemonShowdown 
+- [x] Discord 
 
 ### Documention
 Check out [this site](wlgranados.github.io/quadbot) for documentation!
