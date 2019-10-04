@@ -7,13 +7,19 @@ from utils.details import config
 from clients.pokemon.showdown import ReplyObject
 
 class Search(CommandBase):
-  def __init__(self):
+  def __init__(self, searx_host='http://searx:8888'):
     super().__init__(aliases=['search'], can_learn=False)
     self.supported_engines = [
       'google',
       'steam',
       'github'
       ]
+    # By default if we run this in the docker-compose environment
+    # provided we should be able to reach this domain at this default.
+    # for other purposes like for testing we might need to access 
+    # it at http://localhost:8888 if we're trying to run integration
+    # tests locally
+    self.searx_host = searx_host
 
   def learn(self, room, user, data):
         pass
@@ -26,7 +32,7 @@ class Search(CommandBase):
       engines: string, specific engines supported.
     """
     session = aiohttp.ClientSession()
-    url = 'http://searx:8888'
+    url = self.searx_host
     payload = {'q': search_term , 'format':'json', 'engines': engines}
     resp = await session.get(url, data=payload)
     text = await resp.text()

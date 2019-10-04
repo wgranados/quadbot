@@ -8,6 +8,7 @@ This project wraps core components in docker and makes use of other useful compo
 - [PIP](https://pip.pypa.io/en/stable/). Package manager for python
 ## Guide
 1. Follow the instructions in `details-example.yaml` to configure your bot for login
+2. Build searx using `docker-compose build searx`
 2. Run using `docker-compose up -d`
 
 ## Testing
