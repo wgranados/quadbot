@@ -4,9 +4,17 @@ sudo: required
 language: python
 python:
   - "3.5"
+env:
+- DOCKER_COMPOSE_VERSION=3.6
 
 services:
   - docker
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
     - docker-compose build quadbot_ps
