@@ -7,18 +7,14 @@ python:
 services:
   - docker
 
-env:
-  COMPOSE_VERSION: 3.6.0
-
 before_install:
   # Docker Compose Install 
-  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+  - curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
 
 install:
-    - docker-compose build quadbot_ps
     - docker-compose build searx
+    - docker-compose build quadbot_ps
     - pip install -r requirements.txt
 script: 
   - docker-compose up -d searx 
