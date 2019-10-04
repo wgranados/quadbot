@@ -3,3 +3,4 @@ aiohttp == 3.5.4
 websockets == 6.0
 Pillow == 4.0.0
 discord.py == 1.2.2
+pydoc-markdown == 2.0.5

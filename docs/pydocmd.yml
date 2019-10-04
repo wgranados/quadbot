@@ -7,7 +7,7 @@ repo_url: https://github.com/wlgranados/quadbot
 # documented. Higher indentation leads to smaller header size.
 generate:
   - showdown.md:
-    - showdown.showdown.Client
+    - clients.pokemon.showdown.Client
   - plugins/CommandBase.md:
       - plugins.CommandBase.CommandBase
 
@@ -17,11 +17,11 @@ generate:
 # This configuration is not mandatory if you have your own mkdocs.yml config file.
 pages:
 - Home: index.md << ../README.md
-# - Setup: setup.md << ../SETUP.md
-# - Development: 
-#   - showdown: showdown.md
-#   - commands: plugins/CommandBase.md
-#   - testing: testing.md << ../TESTING.md
+- Setup: setup.md << ../SETUP.md
+- Development: 
+  - showdown: showdown.md
+  - commands: plugins/CommandBase.md
+  - testing: testing.md << ../TESTING.md
 - Contributing: contributing.md << ../CONTRIBUTING.md
 - Commands:
   - Search: search.md << ../plugins/search/SearchCommand.md

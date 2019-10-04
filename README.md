@@ -13,4 +13,4 @@ This is an modular multiplatform chat bot written in Python 3, supporting hot re
 - [x] Discord 
 
 ### Documention
-Check out [this site](wlgranados.github.io/quadbot) for documentation!
+Check out [this site](https:/wgma.ca/quadbot) for documentation!
