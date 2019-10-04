@@ -1,0 +1,23 @@
+distro: trusty
+sudo: required
+
+language: python
+python:
+  - "3.5"
+
+services:
+  - docker
+
+before_install:
+  # Docker Compose Install 
+  - curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin/
+
+install:
+    - docker-compose build searx
+    - docker-compose build quadbot_ps
+    - pip install -r requirements.txt
+script: 
+  - docker-compose up -d searx 
+  - python3 -m pytest test
