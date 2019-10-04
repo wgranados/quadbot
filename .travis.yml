@@ -4,8 +4,9 @@ sudo: required
 language: python
 python:
   - "3.5"
+
 env:
-- DOCKER_COMPOSE_VERSION=3.6
+  - DOCKER_COMPOSE_VERSION=3.6
 
 services:
   - docker
