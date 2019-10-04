@@ -1,0 +1,17 @@
+dist: trusty
+sudo: required
+
+language: python
+python:
+  - "3.5"
+
+services:
+  - docker
+
+install:
+    - docker-compose build quadbot_ps
+    - docker-compose build searx
+    - pip install -r requirements.txt
+script: 
+  - docker-compose up -d searx 
+  - python3 -m pytest test
