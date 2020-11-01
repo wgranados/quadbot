@@ -32,7 +32,10 @@ pokemon-showdown:
 
 discord:
   command_prefix: '.'
-  apikey: ''
+  token: 'NDA4MTY4MzY1OTc1MjczNDcz.Xv4tNg.71cp6izChkW0oO_-JTnpN_aqVhM'
+  channels:
+    bots:
+
 
 slack:
   command_prefix: '.'

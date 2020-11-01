@@ -11,6 +11,11 @@ structure = {
         'command_prefix': '',
         'avatar': 0,
         'rooms': []
+    }, 
+    'discord' : {
+        'command_prefix': '',
+        'token' : '',
+        'channels' : ['bots']
     }
 }
 
@@ -27,7 +32,9 @@ def load_config(path):
         with open(path, 'r') as yaml_file:
             config = yaml.safe_load(yaml_file)
             if not config['pokemon-showdown'] or config['pokemon-showdown'].keys() != structure['pokemon-showdown'].keys():
-                raise DetailsError('details.yaml structure incorrect, chec details.py for correct structure')
+                raise DetailsError('details.yaml structure incorrect, check details.py for correct structure')
+            if not config['discord'] or config['discord'].keys() != structure['discord'].keys():
+                raise DetailsError('details.yaml structure incorrect, check details.py for correct structure')
     except FileNotFoundError as e:
         raise DetailsError('details.yaml not found')
 
