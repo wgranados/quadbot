@@ -1,5 +1,5 @@
 PyYAML == 5.1
-aiohttp == 3.5.4
+aiohttp == 3.7.4
 websockets == 6.0
 Pillow == 6.2.0
 discord.py == 1.2.2
