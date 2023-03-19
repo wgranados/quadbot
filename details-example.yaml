@@ -1,0 +1,47 @@
+base-url: 'https://wgma.ca'
+pokemon-showdown:
+  # This is the username you want the bot to have, MUST BE REGISTRED
+  username: ''
+  # The password for the bot
+  password: ''
+  # MASTER bypass every allowance check and can do everything
+  owner: ''
+  # command character, preferably something people don't start sentences with
+  command_prefix: ''
+  # OPTIONAL: The specific avatar the bot should use. Leave as 0 to pick the 
+  # default one.
+  avatar: 0
+  # The rooms that should be joined on login. Leave moderate as fale to not 
+  # enforce punishments. allow games: Specify if chatgames like hangman should 
+  # be allowed in the room. tourwhitelist: If you want to make specific people
+  # able to start tournaments without being @, add them to this list
+  rooms: 
+      botdevelopment:
+        moderate:
+          anything: false
+          banword: false
+          caps: false
+          groupchats: false
+          room: math # This should be the same name as the room name above
+          spam: false
+          stretching: false
+          urls: false
+        broadcastrank: '+'
+        allowgames: False
+
+
+discord:
+  command_prefix: '.'
+  token: ''
+  channels:
+    bots:
+
+
+slack:
+  command_prefix: '.'
+  apikey: ''
+
+apikeys: {
+  pastebin: '',
+  imgur: ''
+}

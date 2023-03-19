@@ -10,10 +10,16 @@ from clients.discord.handler import dsclient
 
 if __name__ == "__main__":
     supported_platforms = ['discord', 'pokemon-showdown', 'slack']
-    platform = sys.argv[1]
-    if(len(sys.argv) < 2 or platform not in supported_platforms):
+    if len(sys.argv) != 2:
         print('serve [platform]\n \t platform: string, one of {}'.format(','.join(supported_platforms)))
         exit(0)
+
+
+    platform = sys.argv[1]
+    if platform not in supported_platforms:
+        print('%s is not supported'.format(platform))
+        exit(0)
+    
     if platform == 'pokemon-showdown':
         event_loop = asyncio.get_event_loop()
         event_loop.run_until_complete(psclient.make_connection())
