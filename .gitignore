@@ -5,3 +5,4 @@ venv/
 test/__pycache__/
 docs/_build/
 .vscode/
+details.yaml
